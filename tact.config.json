@@ -1,0 +1,15 @@
+{
+    "projects": [
+        {
+            "name": "TON Marketplace",
+            "path": "./contracts/marketplace_master.tact",
+            "output": "./build",
+            "options": {
+                "debug": true,
+                "experimental": {
+                    "inline": true
+                }
+            }
+        }
+    ]
+}
