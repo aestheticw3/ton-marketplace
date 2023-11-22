@@ -1,1 +1,1 @@
-export * from '../build/MarketplaceLocal/tact_MarketplaceLocal';
+export * from '../build/MarketplaceMaster/tact_MarketplaceLocal';

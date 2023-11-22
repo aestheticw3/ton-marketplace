@@ -3,8 +3,8 @@
     "version": "0.0.1",
     "scripts": {
         "start": "clear && blueprint run",
-        "build": "clear && blueprint build",
-        "test": "clear && jest --watchAll"
+        "build": "clear && blueprint build MarketplaceMaster",
+        "test": "clear && jest --watch -t='MarketplaceMaster'"
     },
     "devDependencies": {
         "@ton-community/blueprint": "^0.12.0",

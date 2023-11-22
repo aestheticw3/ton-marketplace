@@ -5,6 +5,3 @@ message AdInfo {
     cost: Int as coins;
     owner: Address;
 }
-message InternalAdd {
-    location: String;
-}

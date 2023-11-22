@@ -1,8 +1,9 @@
 import "@stdlib/deploy";
 import "@stdlib/ownable";
-import "./messages.tact";
-import "./marketplace_ad.tact";
 import "./marketplace_profile.tact";
+import "./marketplace_ad.tact";
+import "./messages.tact";
+
 
 contract MarketplaceLocal with Deployable {
     location: String;
@@ -11,11 +12,14 @@ contract MarketplaceLocal with Deployable {
     init(location: String, master: Address){
         self.location = location;
         self.master = master;
+        dump("MarketplaceLocal has been created");
     }
 
     receive(msg: AdInfo){
         let profile_init: StateInit = initOf MarketplaceProfile(self.master, msg.owner);
         require(sender() == contractAddress(profile_init), "Profile only.");
+        dump("MarketplaceLocal has got a new ad");
+
         let ad_init: StateInit = initOf MarketplaceAd(self.master, self.location, self.idx);
         send(SendParameters{
                 to: contractAddress(ad_init),
@@ -32,8 +36,9 @@ contract MarketplaceLocal with Deployable {
                 code: ad_init.code
             }
         );
+        dump("MarketplaceLocal has sent deploy ad tx");
         self.idx = (self.idx + 1);
-        self.reply(InternalAdd{location: self.location});
+        dump("MarketplaceLocal has added a new ad");
     }
 
     get fun marketplace_ads(start: Int, end: Int): map<Int, Address> {

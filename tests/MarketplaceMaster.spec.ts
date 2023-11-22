@@ -1,27 +1,23 @@
 import { Blockchain, SandboxContract, TreasuryContract } from '@ton-community/sandbox';
 import '@ton-community/test-utils';
-import { toNano } from 'ton-core';
+import { Address, toNano } from 'ton-core';
 import { MarketplaceMaster } from '../wrappers/MarketplaceMaster';
 import { MarketplaceProfile } from '../wrappers/MarketplaceProfile';
 
 describe('MarketplaceMaster', () => {
     let blockchain: Blockchain;
     let marketplaceMaster: SandboxContract<MarketplaceMaster>;
-    let marketplaceProfile: SandboxContract<MarketplaceProfile>;
     let deployer: SandboxContract<TreasuryContract>;
 
     beforeEach(async () => {
         blockchain = await Blockchain.create();
 
         marketplaceMaster = blockchain.openContract(await MarketplaceMaster.fromInit());
-        // marketplaceProfile = blockchain.openContract(await MarketplaceProfile.fromInit());
-
         deployer = await blockchain.treasury('deployer');
-
         await marketplaceMaster.send(
             deployer.getSender(),
             {
-                value: toNano('0.05'),
+                value: toNano('1'),
             },
             {
                 $$type: 'Deploy',
@@ -30,17 +26,19 @@ describe('MarketplaceMaster', () => {
         );
     });
 
-    it('should deploy profile', async () => {
+    it('should mint profile', async () => {
         await marketplaceMaster.send(
             deployer.getSender(),
             {
-                value: toNano('0.05'),
+                value: toNano('1'),
             },
-            {
-                $$type: 'MintProfile',
-            }
+            'Mint'
         );
 
-        console.log(await marketplaceMaster.getMarketplaceProfile(deployer.address));
+        const deployerProfileAddress: Address = await marketplaceMaster.getMarketplaceProfile(deployer.address);
+        const profileContract = MarketplaceProfile.fromAddress(deployerProfileAddress);
+        const deployerProfile: SandboxContract<MarketplaceProfile> = blockchain.openContract(profileContract);
+
+        expect((await deployerProfile.getOwner()).toString()).toBe(deployer.address.toString());
     });
 });
