@@ -9,7 +9,6 @@ contract MarketplaceMaster with Deployable, OwnableTransferable {
     owner: Address;
     init(){
         self.owner = sender();
-        dump("MarketplaceMaster has been created");
     }
 
     receive("Mint"){
@@ -22,7 +21,6 @@ contract MarketplaceMaster with Deployable, OwnableTransferable {
                 data: profile_init.data
             }
         );
-        dump("Profile has been minted");
     }
 
     get fun marketplace_profile(owner: Address): Address {

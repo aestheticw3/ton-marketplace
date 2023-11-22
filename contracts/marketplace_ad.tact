@@ -15,7 +15,6 @@ contract MarketplaceAd with Deployable, Ownable {
         self.owner = sender();
         self.location = location;
         self.idx = idx;
-        dump("MarketplaceAd has been created");
     }
 
     receive(msg: AdInfo){
@@ -24,7 +23,6 @@ contract MarketplaceAd with Deployable, Ownable {
         self.description = msg.description;
         self.cost = msg.cost;
         self.owner = msg.owner;
-        dump("MarketplaceAd info has been updated");
     }
 
     get fun info(): AdInfo {

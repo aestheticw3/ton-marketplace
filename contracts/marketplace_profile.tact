@@ -19,7 +19,6 @@ contract MarketplaceProfile with Deployable, Ownable {
         let local_init: StateInit = initOf MarketplaceLocal(msg.location, self.master);
         self.ads.set(self.idx, contractAddress(local_init));
         self.idx = (self.idx + 1);
-        dump("MarketplaceProfile has added a new ad");
         send(SendParameters{
                 to: contractAddress(local_init),
                 value: ton("0.02"),
@@ -34,7 +33,6 @@ contract MarketplaceProfile with Deployable, Ownable {
                 code: local_init.code
             }
         );
-        dump("MarketplaceProfile has sent a new ad to MarketplaceLocal");
     }
 
     receive("Delete profile"){
@@ -46,7 +44,6 @@ contract MarketplaceProfile with Deployable, Ownable {
                 mode: ((SendIgnoreErrors + SendRemainingBalance) + SendDestroyIfZero)
             }
         );
-        dump("MarketplaceProfile has been deleted");
     }
 
     get fun ads(): map<Int, Address> {

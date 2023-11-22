@@ -41,4 +41,24 @@ describe('MarketplaceMaster', () => {
 
         expect((await deployerProfile.getOwner()).toString()).toBe(deployer.address.toString());
     });
+
+    it('should delete profile', async () => {
+        await marketplaceMaster.send(
+            deployer.getSender(),
+            {
+                value: toNano('1'),
+            },
+            'Mint'
+        );
+
+        const deployerProfileAddress: Address = await marketplaceMaster.getMarketplaceProfile(deployer.address);
+        const profileContract = MarketplaceProfile.fromAddress(deployerProfileAddress);
+        const deployerProfile: SandboxContract<MarketplaceProfile> = blockchain.openContract(profileContract);
+
+        expect((await deployerProfile.getOwner()).toString()).toBe(deployer.address.toString());
+
+        await deployerProfile.send(deployer.getSender(), { value: toNano('1') }, 'Delete profile');
+
+        expect(deployerProfile.getOwner()).rejects.toThrow();
+    });
 });
